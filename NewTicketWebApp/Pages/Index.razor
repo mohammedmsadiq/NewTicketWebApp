@@ -1,0 +1,38 @@
+﻿@page "/index"
+<h3>OutStanding Tickets (@loggedTickets.Count(item => !item.Isdone))</h3>
+
+<ul>
+    @foreach (var item in loggedTickets)
+    {
+        <li>
+            <input type="text" @bind="item.Title" />
+            <input type="text" @bind="item.Description" />
+            @item.LoggedDate
+            <input type="checkbox" @bind="item.Isdone" />
+        </li>
+    }
+</ul>
+
+<input type="text" placeholder="Title" @bind="logItem.Title" />
+<input type="text" placeholder="Description" @bind="logItem.Description" />
+<button type="button" @onclick="logTicket">Log Ticket</button>
+
+@code {
+    private IList<TicketItem> loggedTickets = new List<TicketItem>();
+
+    private TicketItem logItem = new TicketItem();
+
+    private void logTicket()
+    {
+        if (!string.IsNullOrEmpty(logItem.Title) && !string.IsNullOrEmpty(logItem.Description))
+        {
+            loggedTickets.Add(new TicketItem()
+            {
+                Title = logItem.Title,
+                Description = logItem.Description,
+                LoggedDate = DateTime.Now.ToString("dddd, dd MMMM yyyy HH:mm:ss")
+            });
+            this.logItem = new TicketItem();
+        }
+    }
+}
